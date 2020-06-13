@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>org.sanfengzh.symbol.substitution.symbol-substitution</id>
+    <name>字符替换</name>
+    <vendor email="geeksf@outlook.com" url="https://github.com/sanfengzh/idea-plugins.git">sanfengzh</vendor>
+
+    <description>自定义的字符替换插件,可以通过配置自定义的替换字符,再输入目标字符后,自动替换成配置的字符</description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <!-- 设置面板组件 -->
+        <applicationConfigurable instance="org.sanfengzh.symbol.substitution.ISubstitutionComponent"></applicationConfigurable>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="isubstitution" class="org.sanfengzh.symbol.substitution.ISubstitutionAction" text="符号替换"
+                description="实现符号替换逻辑"/>
+    </actions>
+</idea-plugin>
