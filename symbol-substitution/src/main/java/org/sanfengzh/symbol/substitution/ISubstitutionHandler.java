@@ -54,6 +54,10 @@ public class ISubstitutionHandler implements TypedActionHandler {
      */
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
+        System.out.println("=================================================");
+        Gson gson = new GsonBuilder().create();
+        System.out.println("配置集合:" + gson.toJson(substitutionMap));
+        System.out.println("输入字符:" + charTyped);
         Document document = editor.getDocument();
         Project project = editor.getProject();
         CaretModel caretModel = editor.getCaretModel();
@@ -63,11 +67,13 @@ public class ISubstitutionHandler implements TypedActionHandler {
         boolean substitutionFlag = false;
         // 首先处理单个字符的替换
         if (substitutionMap.get(String.valueOf(charTyped)) != null) {
+            System.out.println("处理单个字符,替换成:" + substitutionMap.get(String.valueOf(charTyped)));
+            System.out.println("offset:" + offset);
             // 在substitutionMap中有映射关系，说明需要被处理，无论最终能否处理成功都记为处理成功
             substitutionFlag = true;
             Runnable runnable = () -> {
                 // 替换字符
-                document.replaceString(offset, offset, substitutionMap.get(charTyped));
+                document.replaceString(offset, offset, substitutionMap.get(String.valueOf(charTyped)));
                 // 光标的位置
                 primaryCaret.moveToOffset(offset + 1);
             };
@@ -80,6 +86,7 @@ public class ISubstitutionHandler implements TypedActionHandler {
             String text = document.getText();
             // 找到当前输入字符的前一个字符 + 当前输入的字符 组成两个字符的串
             String str = text.substring(offset - 1, offset) + charTyped;
+            System.out.println("处理两个字符,str:" + str);
             if (substitutionMap.get(str) != null) {
                 // 在substitutionMap中有映射关系，说明需要被处理，无论最终能否处理成功都记为处理成功
                 substitutionFlag = true;
@@ -95,6 +102,7 @@ public class ISubstitutionHandler implements TypedActionHandler {
         }
         // 如果两个字符也没替换成功，就不替换了
         if (!substitutionFlag) {
+            System.out.println("不处理");
             Runnable runnable = () -> {
                 // 如果不需要替换为指定的字符，就把当前输入的字符放进去
                 // 这里可能有点费解，既然不需要替换为什么还要走个insertString
